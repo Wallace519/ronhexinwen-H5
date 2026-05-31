@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>油价风暴眼 — 从霍尔木兹海峡到你的购物车</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛢️</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+/* ========== RESET & VARIABLES ========== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0a1628; --deep-blue:#122a4a; --oil:#1a3a5c;
+  --red:#e63946; --orange:#f77f00; --gold:#fcbf49;
+  --china-red:#c41e3a; --green:#2a9d8f; --light-green:#e9f5f3;
+  --bg:#f0f2f5; --card:#ffffff; --text:#1d1d1f; --text2:#555;
+  --text3:#888; --border:#e0e0e0; --shadow:0 2px 16px rgba(0,0,0,.06);
+  --radius:12px; --transition:.3s cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth;font-size:16px;scroll-snap-type:y mandatory}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;color:var(--text);background:var(--bg);line-height:1.7;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+
+/* ========== GLOBAL NAV DOTS ========== */
+#nav-dots{position:fixed;right:12px;top:50%;transform:translateY(-50%);z-index:1000;display:flex;flex-direction:column;gap:10px}
+#nav-dots .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.35);border:1.5px solid rgba(255,255,255,.5);cursor:pointer;transition:var(--transition)}
+#nav-dots .dot.active{background:var(--orange);border-color:var(--orange);box-shadow:0 0 10px rgba(247,127,0,.5);transform:scale(1.3)}
+#nav-dots .dot.dark{background:rgba(0,0,0,.2);border-color:rgba(0,0,0,.3)}
+#nav-dots .dot.dark.active{background:var(--red);border-color:var(--red)}
+
+/* ========== SCREEN BASE ========== */
+.screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;scroll-snap-align:start;padding:60px 20px}
+.screen.dark{background:linear-gradient(160deg,var(--navy) 0%,var(--deep-blue) 40%,#1a1410 100%);color:#fff}
+.screen.light{background:var(--bg);color:var(--text)}
+.screen-inner{width:100%;max-width:480px;margin:0 auto;position:relative;z-index:1}
+.screen-label{font-size:.7rem;text-transform:uppercase;letter-spacing:3px;color:var(--orange);margin-bottom:.5rem;font-weight:700}
+.screen.dark .screen-label{color:var(--gold)}
+.screen h2{font-size:clamp(1.3rem,4vw,1.8rem);font-weight:800;margin-bottom:.8rem;line-height:1.3}
+.screen h3{font-size:clamp(1rem,3vw,1.25rem);font-weight:700;margin-bottom:.5rem;line-height:1.4}
+.screen p{font-size:.9rem;color:var(--text2);line-height:1.8;margin-bottom:.6rem}
+.screen.dark p{color:rgba(255,255,255,.7)}
+.screen .hint{font-size:.75rem;color:var(--text3);margin-top:.5rem;font-style:italic}
+.screen.dark .hint{color:rgba(255,255,255,.45)}
+
+/* ========== DATA HIGHLIGHT ========== */
+.data-num{font-size:2.2rem;font-weight:900;color:var(--red);line-height:1.1}
+.data-num.gold{color:var(--gold)}
+.data-label{font-size:.75rem;color:var(--text3);margin-top:2px}
+.dark .data-label{color:rgba(255,255,255,.5)}
+.data-card{background:var(--card);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);margin:10px 0;border-left:3px solid var(--red)}
+.data-card.green{border-left-color:var(--green)}
+.data-card .card-title{font-weight:700;font-size:.9rem;margin-bottom:4px}
+.data-card .card-val{font-size:1.5rem;font-weight:800;color:var(--red)}
+.data-card .card-note{font-size:.75rem;color:var(--text3);margin-top:2px}
+
+/* ========== BUTTONS ========== */
+.btn{padding:10px 24px;border-radius:24px;font-size:.9rem;font-weight:600;cursor:pointer;border:none;transition:var(--transition);display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--red);color:#fff}
+.btn-primary:hover{background:#c1121f;transform:translateY(-1px)}
+.btn-outline{background:transparent;border:2px solid var(--red);color:var(--red)}
+.btn-reset{background:var(--border);color:var(--text2)}
+
+/* ========== SCREEN 1: COVER ========== */
+#s1-cover{background:linear-gradient(160deg,#050d18 0%,#0d1f35 30%,#1a1010 100%);justify-content:center;padding-top:0}
+#s1-cover .cover-img{width:min(280px,70vw);margin-bottom:1.5rem;filter:drop-shadow(0 4px 30px rgba(247,127,0,.3));animation:float 3s ease-in-out infinite}
+#s1-cover h1{font-size:clamp(1.8rem,6vw,2.6rem);font-weight:900;text-align:center;line-height:1.2;margin-bottom:.5rem}
+#s1-cover .subtitle{font-size:clamp(.85rem,2.5vw,1.1rem);opacity:.8;text-align:center;margin-bottom:.3rem}
+#s1-cover .subhead{font-size:.8rem;opacity:.6;text-align:center;max-width:300px;margin:0 auto 1.5rem}
+#s1-cover .price-hit{text-align:center;cursor:pointer;position:relative}
+#s1-cover .price-hit .blink-num{font-size:4rem;font-weight:900;color:var(--red);text-shadow:0 0 30px rgba(230,57,70,.6);animation:blink 1s infinite;display:inline-block}
+#s1-cover .price-hit .unit{font-size:1rem;color:rgba(255,255,255,.6);margin-left:2px}
+#s1-cover .price-hit .tap-hint{font-size:.7rem;color:rgba(255,255,255,.5);animation:blink .8s infinite;margin-top:4px}
+#s1-cover .reveal-text{font-size:.85rem;color:var(--gold);text-align:center;margin-top:1rem;max-width:320px;opacity:0;transform:translateY(10px);transition:all .6s}
+#s1-cover .reveal-text.show{opacity:1;transform:translateY(0)}
+#s1-cover .scroll-down{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.4);font-size:1.4rem;animation:bounce 2s infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-10px)}}
+
+/* ========== SCREEN 2: STORM SOURCE ========== */
+#s2-storm{background:linear-gradient(180deg,#0d1f35 0%,#122a4a 50%,var(--bg) 100%);padding-top:80px}
+#s2-storm .map-wrap{position:relative;margin:1rem 0;border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+#s2-storm .map-wrap img{width:100%;display:block}
+#s2-storm .map-click-zone{position:absolute;inset:0;cursor:pointer}
+#s2-storm .map-marker{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;background:var(--red);border-radius:50%;animation:pulse 2s infinite;pointer-events:none}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(230,57,70,.6)}50%{box-shadow:0 0 0 18px rgba(230,57,70,0)}}
+#s2-storm .drag-area{background:var(--card);border-radius:var(--radius);padding:20px;margin:1rem 0;box-shadow:var(--shadow);text-align:center}
+#s2-storm .drag-track{position:relative;height:60px;margin:16px 0;background:linear-gradient(90deg,var(--green),var(--gold),var(--red));border-radius:30px;cursor:pointer;touch-action:none}
+#s2-storm .drag-handle{position:absolute;top:-6px;width:72px;height:72px;transform:translateX(-36px);font-size:2.5rem;line-height:72px;text-align:center;cursor:grab;transition:filter .2s;user-select:none;-webkit-user-select:none}
+#s2-storm .drag-handle:active{cursor:grabbing}
+#s2-storm .drag-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--text3);margin-top:4px}
+#s2-storm .oil-price-display{font-size:2rem;font-weight:900;color:var(--red);transition:var(--transition)}
+#s2-storm .transition-hint{font-size:.8rem;color:var(--text3);text-align:center;margin-top:1rem;font-style:italic}
+
+/* ========== SCREEN 3: GAS STATION ========== */
+#s3-gas .highlight-box{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);text-align:center;margin:1rem 0}
+#s3-gas .persona-tabs{display:flex;gap:10px;margin:1rem 0}
+#s3-gas .persona-btn{flex:1;padding:14px;border-radius:var(--radius);background:var(--card);border:2px solid var(--border);cursor:pointer;text-align:center;transition:var(--transition);font-size:.85rem}
+#s3-gas .persona-btn.active{border-color:var(--red);background:#fef2f2}
+#s3-gas .persona-btn .emoji{font-size:2rem;display:block;margin-bottom:4px}
+#s3-gas .story-card{background:var(--card);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);margin:1rem 0;display:none}
+#s3-gas .story-card.active{display:block;animation:fadeUp .4s}
+#s3-gas .slider-wrap{margin:1.5rem 0}
+#s3-gas .slider-labels{display:flex;justify-content:space-between;font-size:.75rem;color:var(--text3);margin-bottom:8px}
+#s3-gas input[type=range]{width:100%;height:8px;-webkit-appearance:none;background:linear-gradient(90deg,var(--green),var(--red));border-radius:4px;outline:none}
+#s3-gas input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--red);cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+#s3-gas .slider-reveal{text-align:center;font-size:.85rem;color:var(--text2);margin-top:.8rem;min-height:2.5em;transition:all .3s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ========== SCREEN 4: TRANSMISSION CHAIN ========== */
+#s4-chain .chain{display:flex;flex-direction:column;align-items:center;gap:0;margin:1.5rem 0}
+#s4-chain .chain-node{background:var(--card);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);cursor:pointer;width:100%;text-align:center;transition:var(--transition);border:2px solid transparent;position:relative}
+#s4-chain .chain-node:hover,.chain-node.tapped{border-color:var(--red);transform:translateY(-2px);box-shadow:0 6px 20px rgba(230,57,70,.12)}
+#s4-chain .chain-arrow{font-size:1.5rem;color:var(--orange);padding:4px 0}
+#s4-chain .node-icon{font-size:1.8rem;display:block;margin-bottom:4px}
+#s4-chain .node-title{font-weight:700;font-size:.9rem}
+#s4-chain .node-hint{font-size:.7rem;color:var(--text3);margin-top:2px}
+#s4-chain .node-detail{display:none;font-size:.82rem;color:var(--text2);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);line-height:1.7}
+#s4-chain .node-detail.show{display:block;animation:fadeUp .3s}
+#s4-chain .special-note{margin-top:1rem;padding:12px 16px;background:var(--light-green);border-radius:8px;font-size:.8rem;color:var(--green);text-align:center;cursor:pointer}
+
+/* ========== SCREEN 5: CHINA vs USA ========== */
+#s5-compare .compare-cards{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 0 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#s5-compare .compare-cards::-webkit-scrollbar{display:none}
+#s5-compare .cmp-card{min-width:260px;flex-shrink:0;background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);scroll-snap-align:start;cursor:pointer;transition:var(--transition)}
+#s5-compare .cmp-card.expanded{box-shadow:0 8px 30px rgba(0,0,0,.12)}
+#s5-compare .cmp-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+#s5-compare .cmp-row:last-child{border-bottom:none}
+#s5-compare .cmp-country{font-weight:700;font-size:.9rem}
+#s5-compare .cmp-val{font-weight:800;font-size:1.1rem}
+#s5-compare .cmp-val.cn{color:var(--china-red)}
+#s5-compare .cmp-val.us{color:#002868}
+#s5-compare .cmp-life{display:none;font-size:.8rem;color:var(--text2);margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);line-height:1.6}
+#s5-compare .cmp-life.show{display:block;animation:fadeUp .3s}
+#s5-compare .summary-box{background:var(--card);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);text-align:center;font-size:.85rem;color:var(--text2);line-height:1.7;margin-top:1rem;border:1px solid var(--border)}
+
+/* ========== SCREEN 6: INDIA & GERMANY ========== */
+#s6-ind-ge .btn-row{display:flex;gap:12px;margin:1rem 0}
+#s6-ind-ge .country-btn{flex:1;padding:20px 16px;border-radius:var(--radius);background:var(--card);border:2px solid var(--border);cursor:pointer;text-align:center;transition:var(--transition);font-size:.9rem;font-weight:700}
+#s6-ind-ge .country-btn.active{box-shadow:0 4px 16px rgba(0,0,0,.1)}
+#s6-ind-ge .country-btn.india.active{border-color:#ff9933;background:#fff9f0}
+#s6-ind-ge .country-btn.germany.active{border-color:#000;background:#f5f5f5}
+#s6-ind-ge .country-btn .flag{font-size:2.5rem;display:block;margin-bottom:6px}
+#s6-ind-ge .detail-panel{display:none;background:var(--card);border-radius:var(--radius);padding:16px 20px;box-shadow:var(--shadow);margin-top:.5rem}
+#s6-ind-ge .detail-panel.active{display:block;animation:fadeUp .4s}
+#s6-ind-ge .detail-item{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);font-size:.85rem}
+#s6-ind-ge .detail-item:last-child{border-bottom:none}
+#s6-ind-ge .detail-item .di-label{flex:1;color:var(--text2)}
+#s6-ind-ge .detail-item .di-val{font-weight:700;text-align:right;margin-left:12px}
+#s6-ind-ge .detail-item .di-note{font-size:.72rem;color:var(--text3);margin-top:2px}
+#s6-ind-ge .note-box{font-size:.78rem;color:var(--text3);background:var(--light-green);padding:10px 14px;border-radius:8px;margin-top:.8rem;line-height:1.6}
+
+/* ========== SCREEN 7: JAPAN ========== */
+#s7-japan .timeline-scroll{display:flex;gap:8px;overflow-x:auto;padding:10px 0 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#s7-japan .timeline-scroll::-webkit-scrollbar{display:none}
+#s7-japan .tl-month{flex-shrink:0;min-width:90px;background:var(--card);border-radius:var(--radius);padding:12px;text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:var(--transition)}
+#s7-japan .tl-month.active{background:var(--red);color:#fff}
+#s7-japan .tl-month .mon{font-size:.8rem;font-weight:700}
+#s7-japan .tl-month .count{font-size:1.4rem;font-weight:900;margin:2px 0}
+#s7-japan .tl-month .unit{font-size:.65rem;opacity:.7}
+#s7-japan .tl-compare{font-size:.8rem;color:var(--text2);text-align:center;margin-top:8px;padding:10px;background:#fef2f2;border-radius:8px}
+#s7-japan .category-tags{display:flex;flex-wrap:wrap;gap:8px;margin:1rem 0}
+#s7-japan .cat-tag{padding:8px 16px;border-radius:20px;background:var(--card);border:1.5px solid var(--border);cursor:pointer;font-size:.82rem;transition:var(--transition)}
+#s7-japan .cat-tag.active{border-color:var(--red);background:#fef2f2;font-weight:600}
+#s7-japan .cat-detail{display:none;background:var(--card);border-radius:var(--radius);padding:14px 18px;box-shadow:var(--shadow);font-size:.85rem;line-height:1.7}
+#s7-japan .cat-detail.show{display:block;animation:fadeUp .3s}
+#s7-japan .engel-box{text-align:center;margin-top:1.5rem;padding:16px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer}
+#s7-japan .engel-box .engel-nums{display:flex;justify-content:center;gap:2rem;margin-bottom:6px}
+#s7-japan .engel-box .engel-val{font-size:1.8rem;font-weight:900}
+#s7-japan .engel-box .engel-val.jp{color:var(--red)}
+#s7-japan .engel-box .engel-val.cn{color:var(--china-red)}
+#s7-japan .engel-explain{display:none;font-size:.78rem;color:var(--text2);margin-top:8px}
+#s7-japan .engel-explain.show{display:block;animation:fadeUp .3s}
+
+/* ========== SCREEN 8: SIMULATOR ========== */
+#s8-sim .check-list{display:flex;flex-direction:column;gap:6px;margin:1rem 0}
+#s8-sim .check-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);cursor:pointer;transition:var(--transition);border:2px solid transparent}
+#s8-sim .check-item.checked{border-color:var(--red);background:#fef8f8}
+#s8-sim .check-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--transition);font-size:.7rem;color:transparent}
+#s8-sim .check-item.checked .check-box{background:var(--red);border-color:var(--red);color:#fff}
+#s8-sim .check-text{flex:1;font-size:.85rem;line-height:1.4}
+#s8-sim .check-amount{font-weight:700;font-size:.9rem;color:var(--red)}
+#s8-sim .total-box{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);text-align:center;margin:1rem 0}
+#s8-sim .total-label{font-size:.85rem;color:var(--text3)}
+#s8-sim .total-num{font-size:2.5rem;font-weight:900;color:var(--red);transition:var(--transition)}
+#s8-sim .total-note{font-size:.75rem;color:var(--text3);margin-top:4px}
+#s8-sim .btn-row{display:flex;gap:10px;justify-content:center;margin:1rem 0}
+#s8-sim .chain-modal{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.85);flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#s8-sim .chain-modal.open{display:flex}
+#s8-sim .chain-step{display:none;text-align:center;color:#fff;animation:fadeUp .5s}
+#s8-sim .chain-step.active{display:block}
+#s8-sim .chain-step .step-icon{font-size:3rem;margin-bottom:.8rem}
+#s8-sim .chain-step .step-title{font-size:1.2rem;font-weight:700;margin-bottom:.4rem}
+#s8-sim .chain-step .step-desc{font-size:.85rem;opacity:.8;max-width:280px;margin:0 auto;line-height:1.6}
+#s8-sim .chain-next{padding:10px 32px;background:var(--orange);color:#fff;border:none;border-radius:20px;font-size:.9rem;font-weight:600;cursor:pointer;margin-top:1.5rem;transition:var(--transition)}
+#s8-sim .chain-close{position:absolute;top:20px;right:20px;color:rgba(255,255,255,.6);font-size:1.5rem;cursor:pointer;background:none;border:none;z-index:1}
+
+/* ========== POPUPS & MODALS ========== */
+.popup-overlay{display:none;position:fixed;inset:0;z-index:1500;background:rgba(0,0,0,.5);align-items:center;justify-content:center;padding:20px}
+.popup-overlay.open{display:flex}
+.popup-card{background:var(--card);border-radius:var(--radius);padding:24px;max-width:380px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.2);position:relative;animation:fadeUp .3s}
+.popup-card h4{font-size:1.1rem;margin-bottom:.6rem}
+.popup-card p{font-size:.85rem;color:var(--text2);line-height:1.7}
+.popup-card .close-btn{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:var(--border);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;transition:var(--transition)}
+.popup-card .close-btn:hover{background:#ddd}
+
+/* ========== RESPONSIVE ========== */
+@media(min-width:768px){
+  .screen-inner{max-width:600px}
+  #s5-compare .cmp-card{min-width:300px}
+}
+@media(min-width:1024px){
+  .screen-inner{max-width:720px}
+  #s4-chain .chain{flex-direction:row;flex-wrap:wrap;justify-content:center}
+  #s4-chain .chain-arrow{transform:rotate(-90deg);padding:0 8px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION DOTS ===== -->
+<nav id="nav-dots">
+  <div class="dot active" data-screen="0" title="封面"></div>
+  <div class="dot" data-screen="1" title="风暴之源"></div>
+  <div class="dot dark" data-screen="2" title="中国加油站"></div>
+  <div class="dot dark" data-screen="3" title="传导链"></div>
+  <div class="dot dark" data-screen="4" title="中美对比"></div>
+  <div class="dot dark" data-screen="5" title="印度&德国"></div>
+  <div class="dot dark" data-screen="6" title="日本"></div>
+  <div class="dot dark" data-screen="7" title="支出模拟器"></div>
+</nav>
+
+<!-- ===== SCREEN 1: COVER ===== -->
+<section class="screen dark" id="s1-cover" data-index="0">
+  <div class="screen-inner" style="text-align:center">
+    <img src="image/油轮购物车剪影图.png" alt="油轮与购物车剪影" class="cover-img">
+    <p class="screen-label">▍融合新闻 H5</p>
+    <h1>油价风暴眼</h1>
+    <p class="subtitle">从霍尔木兹海峡到你的购物车</p>
+    <p class="subhead">一场万里之外的冲突，如何改写了中国家庭账单？</p>
+    <div class="price-hit" id="priceHit">
+      <span class="blink-num" id="blinkNum">126</span>
+      <span class="unit">美元/桶</span>
+      <div class="tap-hint">👆 点击查看</div>
+    </div>
+    <p class="reveal-text" id="revealText">原油每桶暴涨56美元<br>正在向你的日常生活传导…</p>
+  </div>
+  <div class="scroll-down"><i class="fa-solid fa-chevron-down"></i></div>
+</section>
+
+<!-- ===== SCREEN 2: STORM SOURCE ===== -->
+<section class="screen dark" id="s2-storm" data-index="1">
+  <div class="screen-inner">
+    <p class="screen-label">▍第一幕</p>
+    <h2>风暴之源：海峡关闭与全球油价冲击</h2>
+
+    <!-- Map -->
+    <div class="map-wrap" id="mapWrap">
+      <img src="image/霍尔木兹海峡地图.jpg" alt="霍尔木兹海峡地图">
+      <div class="map-click-zone" id="mapClick"></div>
+      <div class="map-marker"></div>
+    </div>
+
+    <!-- Drag interaction -->
+    <div class="drag-area">
+      <p style="font-weight:700;margin-bottom:4px">🛢️ 拖动油轮，改变海峡状态</p>
+      <div class="drag-track" id="dragTrack">
+        <div class="drag-handle" id="dragHandle">🚢</div>
+      </div>
+      <div class="drag-labels"><span>正常通航</span><span>部分关闭</span><span>近乎停摆</span></div>
+      <div style="margin-top:10px">
+        <span style="font-size:.85rem">布伦特原油：</span>
+        <span class="oil-price-display" id="oilPrice">70</span>
+        <span style="font-size:.85rem">美元/桶</span>
+      </div>
+    </div>
+
+    <p class="transition-hint">这场风暴，首先冲击了中国加油站 ⛽</p>
+  </div>
+</section>
+
+<!-- ===== SCREEN 3: CHINA GAS STATION ===== -->
+<section class="screen light" id="s3-gas" data-index="2">
+  <div class="screen-inner">
+    <p class="screen-label">▍第二幕</p>
+    <h2>中国：加油站的"9元时代"</h2>
+
+    <div class="highlight-box">
+      <div class="data-num" id="gasPriceNum">19.3<span style="font-size:1rem">%</span></div>
+      <div class="data-label">汽油价格同比涨幅 · 92号汽油仍处"9元/升"时代</div>
+    </div>
+
+    <!-- Persona toggle -->
+    <p style="font-size:.8rem;color:var(--text3);text-align:center">👇 点击查看不同人群的加油账单</p>
+    <div class="persona-tabs">
+      <button class="persona-btn active" data-persona="driver">
+        <span class="emoji">🚕</span>网约车司机
+      </button>
+      <button class="persona-btn" data-persona="commuter">
+        <span class="emoji">💼</span>白领通勤
+      </button>
+    </div>
+    <div class="story-card active" id="story-driver">
+      <p style="font-weight:700">网约车司机：</p>
+      <p>加满一箱油（50L），从约 <strong>350元 → 430元</strong>，每月多支出约 <strong style="color:var(--red)">320元</strong>。</p>
+    </div>
+    <div class="story-card" id="story-commuter">
+      <p style="font-weight:700">白领通勤族：</p>
+      <p>每月加油两次，多花约 <strong>80元</strong>，相当于两杯奶茶 🧋🧋。</p>
+    </div>
+
+    <!-- Slider comparison -->
+    <div class="slider-wrap">
+      <p style="font-weight:700;font-size:.9rem;margin-bottom:8px">🎚️ 拖动滑块对比涨幅</p>
+      <div class="slider-labels"><span>国内汽油 +19.3%</span><span>国际油价 +80%</span></div>
+      <input type="range" min="0" max="100" value="0" id="gasSlider">
+      <div class="slider-reveal" id="sliderReveal">← 滑动查看背后的机制 →</div>
+    </div>
+
+    <!-- Data cards -->
+    <div class="data-card">
+      <div class="card-title">⛽ 92号汽油</div>
+      <div class="card-val">9元/升</div>
+      <div class="card-note">大部分地区仍处"9元时代"</div>
+    </div>
+    <div class="data-card green">
+      <div class="card-title">📊 CPI影响</div>
+      <div class="card-val" style="color:var(--green)">+0.56<span style="font-size:.8rem">个百分点</span></div>
+      <div class="card-note">汽油涨价对CPI的传导贡献</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 4: TRANSMISSION CHAIN ===== -->
+<section class="screen light" id="s4-chain" data-index="3">
+  <div class="screen-inner">
+    <p class="screen-label">▍第三幕</p>
+    <h2>从加油站到购物车：价格传导链</h2>
+    <p style="font-size:.8rem;color:var(--text3);text-align:center">👇 点击每个环节查看具体影响</p>
+
+    <div class="chain">
+      <div class="chain-node" data-node="oil">
+        <span class="node-icon">🛢️</span>
+        <div class="node-title">国际油价上涨</div>
+        <div class="node-hint">布伦特 70→126 美元/桶</div>
+        <div class="node-detail">霍尔木兹海峡近乎停摆，全球20%-25%海运石油通道受阻，布伦特原油一度飙升至126美元/桶。</div>
+      </div>
+      <div class="chain-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+      <div class="chain-node" data-node="logistics">
+        <span class="node-icon">🚛</span>
+        <div class="node-title">物流运输成本上升</div>
+        <div class="node-hint">点击查看详情</div>
+        <div class="node-detail">成品油涨价推高公路货运成本，吨公里运费上涨约 <strong>5%-8%</strong>。中国4月PPI同比上涨2.8%，工业品出厂端成本压力正在积累。</div>
+      </div>
+      <div class="chain-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+      <div class="chain-node" data-node="materials">
+        <span class="node-icon">📦</span>
+        <div class="node-title">塑料/化工/饲料成本上升</div>
+        <div class="node-hint">点击查看详情</div>
+        <div class="node-detail">工业消费品价格同比上涨 <strong>3.5%</strong>——从一瓶洗衣液到一包塑料袋，都在变贵。饲料成本推高肉、蛋、禽价格，牛肉、鸡蛋涨幅在1.0%-6.2%之间。</div>
+      </div>
+      <div class="chain-arrow"><i class="fa-solid fa-arrow-down"></i></div>
+
+      <div class="chain-node" data-node="consumer">
+        <span class="node-icon">🛒</span>
+        <div class="node-title">终端消费品涨价</div>
+        <div class="node-hint">点击查看详情</div>
+        <div class="node-detail">核心CPI同比上涨 <strong>1.2%</strong>（温和），但能源传导仍在持续。交通、餐饮、日用品、衣物等民生领域均受影响。</div>
+      </div>
+    </div>
+
+    <div class="special-note" id="specialNote">
+      <i class="fa-solid fa-shield-halved"></i> 食用油价格环比下跌0.2%-0.5%：保供稳价机制正在发挥作用 →
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 5: CHINA vs USA ===== -->
+<section class="screen light" id="s5-compare" data-index="4">
+  <div class="screen-inner">
+    <p class="screen-label">▍第四幕 · 中美对比</p>
+    <h2>谁的购物车更"痛"？</h2>
+    <p style="font-size:.8rem;color:var(--text3)">👈 👉 左右滑动卡片 · 点击展开生活换算</p>
+
+    <div class="compare-cards" id="compareCards">
+      <!-- Gasoline -->
+      <div class="cmp-card" data-card="gas">
+        <p style="font-weight:700;margin-bottom:8px">⛽ 汽油价格</p>
+        <div class="cmp-row">
+          <span class="cmp-country">🇨🇳 中国</span>
+          <span class="cmp-val cn">+19.3%</span>
+        </div>
+        <div class="cmp-row">
+          <span class="cmp-country">🇺🇸 美国</span>
+          <span class="cmp-val us">+28.4%</span>
+        </div>
+        <div class="cmp-life">
+          🇨🇳 每升贵约1.5元，月多花60-80元<br>
+          🇺🇸 每加仑贵$0.91，月多花约$15
+        </div>
+      </div>
+
+      <!-- Food -->
+      <div class="cmp-card" data-card="food">
+        <p style="font-weight:700;margin-bottom:8px">🥩 食品（牛肉）</p>
+        <div class="cmp-row">
+          <span class="cmp-country">🇨🇳 中国牛肉</span>
+          <span class="cmp-val cn">+6.2%</span>
+        </div>
+        <div class="cmp-row">
+          <span class="cmp-country">🇺🇸 碎牛肉</span>
+          <span class="cmp-val us">+18.9%</span>
+        </div>
+        <div class="cmp-life">
+          🇨🇳 一斤牛肉贵约2-3元<br>
+          🇺🇸 一磅碎牛肉贵约$0.80
+        </div>
+      </div>
+
+      <!-- Electricity -->
+      <div class="cmp-card" data-card="elec">
+        <p style="font-weight:700;margin-bottom:8px">⚡ 电力价格</p>
+        <div class="cmp-row">
+          <span class="cmp-country">🇨🇳 中国</span>
+          <span class="cmp-val cn">基本稳定</span>
+        </div>
+        <div class="cmp-row">
+          <span class="cmp-country">🇺🇸 美国</span>
+          <span class="cmp-val us">+6.1%</span>
+        </div>
+        <div class="cmp-life">
+          🇨🇳 居民电价基本未受影响<br>
+          🇺🇸 月电费多支出约$8-12
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-box">
+      中国的调控机制让油价冲击"软着陆"，<br>但每一个百分点的涨幅，<br>仍然落在了普通人的肩上。
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 6: INDIA & GERMANY ===== -->
+<section class="screen light" id="s6-ind-ge" data-index="5">
+  <div class="screen-inner">
+    <p class="screen-label">▍第五幕 · 印度 & 德国</p>
+    <h2>餐桌与电费单</h2>
+
+    <div class="btn-row">
+      <button class="country-btn india active" id="btnIndia">
+        <span class="flag">🇮🇳</span>印度餐桌
+      </button>
+      <button class="country-btn germany" id="btnGermany">
+        <span class="flag">🇩🇪</span>德国电费单
+      </button>
+    </div>
+
+    <!-- India Panel -->
+    <div class="detail-panel active" id="panelIndia">
+      <div class="detail-item">
+        <div class="di-label">🫒 食用油价格</div>
+        <div class="di-val" style="color:var(--red)">110→207卢比/升<br><span class="di-note">翻了一倍以上</span></div>
+      </div>
+      <div class="detail-item">
+        <div class="di-label">🍅 西红柿价格</div>
+        <div class="di-val" style="color:var(--red)">+35.3%</div>
+      </div>
+      <div class="detail-item">
+        <div class="di-label">🍛 素/荤Thali餐成本</div>
+        <div class="di-val" style="color:var(--red)">+2%</div>
+      </div>
+      <div class="note-box">
+        🇨🇳 对比：中国食用油环比下跌0.2%-0.5%，鲜菜同比-0.5%。印度缺乏战略储备与价格管控，食用油冲击更为剧烈。
+      </div>
+    </div>
+
+    <!-- Germany Panel -->
+    <div class="detail-panel" id="panelGermany">
+      <div class="detail-item">
+        <div class="di-label">🍽️ 餐饮服务价格</div>
+        <div class="di-val" style="color:var(--red)">+28.2%<br><span class="di-note">较2022年同期</span></div>
+      </div>
+      <div class="detail-item">
+        <div class="di-label">💡 电费与燃气费</div>
+        <div class="di-val" style="color:var(--red)">显著上涨</div>
+      </div>
+      <div class="detail-item">
+        <div class="di-label">😰 消费信心</div>
+        <div class="di-val" style="color:var(--red)">1/8德国人<br><span class="di-note">难以负担日常开支</span></div>
+      </div>
+      <div class="note-box">
+        🇨🇳 对比：中国餐饮价格涨幅约3%-5%，居民电价基本稳定。德国高度依赖能源进口，对民生的冲击远大于中国。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 7: JAPAN ===== -->
+<section class="screen light" id="s7-japan" data-index="6">
+  <div class="screen-inner">
+    <p class="screen-label">▍第六幕 · 日本</p>
+    <h2>涨价潮与恩格尔系数</h2>
+
+    <!-- Timeline -->
+    <p style="font-size:.8rem;color:var(--text3);text-align:center">📅 左右滑动查看各月涨价商品数量</p>
+    <div class="timeline-scroll" id="timelineScroll">
+      <div class="tl-month" data-mon="4">
+        <div class="mon">4月</div>
+        <div class="count">2,798</div>
+        <div class="unit">种商品涨价</div>
+      </div>
+      <div class="tl-month active" data-mon="6">
+        <div class="mon">6月</div>
+        <div class="count">1,078</div>
+        <div class="unit">种商品涨价</div>
+      </div>
+      <div class="tl-month" data-mon="7">
+        <div class="mon">7月</div>
+        <div class="count">2,269</div>
+        <div class="unit">种商品涨价</div>
+      </div>
+      <div class="tl-month" data-mon="10">
+        <div class="mon">1-10月</div>
+        <div class="count">9,361</div>
+        <div class="unit">种累计涨价</div>
+      </div>
+      <div class="tl-month" data-mon="year">
+        <div class="mon">全年预计</div>
+        <div class="count">10,000+</div>
+        <div class="unit">连续五年破万</div>
+      </div>
+    </div>
+    <div class="tl-compare">
+      🇨🇳 对比：中国未出现大规模集中涨价，CPI仅上涨1.2%
+    </div>
+
+    <!-- Category tags -->
+    <p style="font-weight:700;font-size:.9rem;margin-top:1.2rem">🔍 点击查看具体品类涨幅</p>
+    <div class="category-tags">
+      <span class="cat-tag active" data-cat="coffee">☕ 咖啡豆</span>
+      <span class="cat-tag" data-cat="chocolate">🍫 巧克力</span>
+      <span class="cat-tag" data-cat="tuna">🐟 金枪鱼</span>
+      <span class="cat-tag" data-cat="flour">🌾 小麦粉</span>
+    </div>
+    <div class="cat-detail show" id="cat-coffee">
+      日本咖啡豆价格同比上涨 <strong style="color:var(--red)">46.8%</strong>，远超中国（中国咖啡价格相对稳定）。
+    </div>
+    <div class="cat-detail" id="cat-chocolate">
+      巧克力价格同比上涨 <strong style="color:var(--red)">21.6%</strong>，原材料成本推动明显。
+    </div>
+    <div class="cat-detail" id="cat-tuna">
+      金枪鱼价格同比上涨 <strong style="color:var(--red)">13.6%</strong>，海产品运输与冷链成本上升。
+    </div>
+    <div class="cat-detail" id="cat-flour">
+      小麦粉最高涨幅 <strong style="color:var(--red)">9%</strong>，部分制粉产品最高涨幅达24%。
+    </div>
+
+    <!-- Engel Coefficient -->
+    <div class="engel-box" id="engelBox">
+      <p style="font-weight:700;font-size:.9rem;margin-bottom:6px">📊 恩格尔系数对比（点击查看解读）</p>
+      <div class="engel-nums">
+        <div><div class="engel-val jp">28.6<span style="font-size:.7rem">%</span></div><div style="font-size:.7rem;color:var(--text3)">日本</div></div>
+        <div><div class="engel-val cn">~29.8<span style="font-size:.7rem">%</span></div><div style="font-size:.7rem;color:var(--text3)">中国</div></div>
+      </div>
+      <div class="engel-explain">
+        日本恩格尔系数28.6%创1981年以来新高。<br>中国约29.8%，数值相近但中国收入增速更快。<br>恩格尔系数越高，生活对价格冲击越脆弱。
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SCREEN 8: PERSONAL SIMULATOR ===== -->
+<section class="screen light" id="s8-sim" data-index="7">
+  <div class="screen-inner">
+    <p class="screen-label">▍终幕</p>
+    <h2>算一算：油价风暴让你多花了多少？</h2>
+    <p style="font-size:.8rem;color:var(--text3);text-align:center">👇 勾选你的消费习惯（限选3-5项）</p>
+
+    <div class="check-list" id="checkList">
+      <div class="check-item" data-amount="80" data-label="开车3次以上/周">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <span class="check-text">🚗 我每周开车3次以上</span>
+        <span class="check-amount">~60-100元/月</span>
+      </div>
+      <div class="check-item" data-amount="30" data-label="经常点外卖">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <span class="check-text">🍱 我经常点外卖</span>
+        <span class="check-amount">~20-40元/月</span>
+      </div>
+      <div class="check-item" data-amount="20" data-label="常买牛肉/鸡蛋">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <span class="check-text">🥩 我常买牛肉/鸡蛋</span>
+        <span class="check-amount">~15-30元/月</span>
+      </div>
+      <div class="check-item" data-amount="15" data-label="每天瓶装/罐装饮料">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <span class="check-text">🥤 我每天喝瓶装/罐装饮料</span>
+        <span class="check-amount">~10-20元/月</span>
+      </div>
+      <div class="check-item" data-amount="8" data-label="月电费超150元">
+        <div class="check-box"><i class="fa-solid fa-check"></i></div>
+        <span class="check-text">💡 我每月电费超过150元</span>
+        <span class="check-amount">~5-10元/月</span>
+      </div>
+    </div>
+
+    <!-- Total -->
+    <div class="total-box">
+      <div class="total-label">📋 预估月度额外支出</div>
+      <div class="total-num" id="totalNum">0</div>
+      <div style="font-size:1.2rem;font-weight:700;color:var(--red)">元</div>
+      <div class="total-note" id="totalNote">请勾选上方消费习惯</div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-row">
+      <button class="btn btn-reset" id="btnReset"><i class="fa-solid fa-rotate-left"></i> 重置</button>
+      <button class="btn btn-primary" id="btnChain"><i class="fa-solid fa-link"></i> 查看完整传导链</button>
+    </div>
+  </div>
+
+  <!-- Chain Animation Modal -->
+  <div class="chain-modal" id="chainModal">
+    <button class="chain-close" id="chainClose"><i class="fa-solid fa-xmark"></i></button>
+    <div class="chain-step active" data-step="1">
+      <div class="step-icon">🌊</div>
+      <div class="step-title">第一步：霍尔木兹海峡关闭</div>
+      <div class="step-desc">全球20%-25%海运石油通道受阻，最窄处仅54公里。</div>
+    </div>
+    <div class="chain-step" data-step="2">
+      <div class="step-icon">📈</div>
+      <div class="step-title">第二步：国际油价暴涨</div>
+      <div class="step-desc">布伦特原油从70美元飙升至126美元/桶，涨幅约80%。</div>
+    </div>
+    <div class="chain-step" data-step="3">
+      <div class="step-icon">⛽</div>
+      <div class="step-title">第三步：中国成品油涨价</div>
+      <div class="step-desc">92号汽油进入"9元时代"，同比上涨19.3%，受天花板价机制缓冲。</div>
+    </div>
+    <div class="chain-step" data-step="4">
+      <div class="step-icon">🏭</div>
+      <div class="step-title">第四步：物流/化工/饲料成本上升</div>
+      <div class="step-desc">公路货运吨公里涨5%-8%，工业消费品涨3.5%，饲料推高肉蛋价格。</div>
+    </div>
+    <div class="chain-step" data-step="5">
+      <div class="step-icon">🛒</div>
+      <div class="step-title">第五步：进入你的购物车</div>
+      <div class="step-desc">从加油、外卖、日用品到餐桌，每一个环节都在影响你的月支出。</div>
+    </div>
+    <button class="chain-next" id="chainNext">下一步 →</button>
+  </div>
+</section>
+
+<!-- ===== GENERIC POPUP OVERLAY ===== -->
+<div class="popup-overlay" id="popupOverlay">
+  <div class="popup-card" id="popupCard">
+    <button class="close-btn" id="popupClose"><i class="fa-solid fa-xmark"></i></button>
+    <h4 id="popupTitle"></h4>
+    <p id="popupBody"></p>
+  </div>
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+/* ========== UTILS ========== */
+function $(sel,ctx){return(ctx||document).querySelector(sel)}
+function $$(sel,ctx){return Array.from((ctx||document).querySelectorAll(sel))}
+function animateNum(el,start,end,dur=1200){
+  const t0=performance.now();
+  function tick(now){
+    const p=Math.min((now-t0)/dur,1);
+    const e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(start+(end-start)*e);
+    if(p<1)requestAnimationFrame(tick);
+    else el.textContent=end;
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ========== NAVIGATION & SCROLL SPY ========== */
+const screens=$$('.screen');
+const dots=$$('#nav-dots .dot');
+
+function updateNav(idx){
+  dots.forEach((d,i)=>{
+    d.classList.toggle('active',i===idx);
+    const screen=screens[i];
+    if(screen.classList.contains('dark')){d.classList.remove('dark')}
+    else{d.classList.add('dark')}
+  });
+}
+
+// Scroll spy
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const idx=parseInt(e.target.dataset.index);
+      updateNav(idx);
+    }
+  });
+},{threshold:0.5});
+
+screens.forEach(s=>observer.observe(s));
+
+// Dot click
+dots.forEach(d=>{
+  d.addEventListener('click',()=>{
+    const idx=parseInt(d.dataset.screen);
+    screens[idx].scrollIntoView({behavior:'smooth'});
+  });
+});
+
+/* ========== SCREEN 1: COVER ========== */
+const blinkNum=$('#blinkNum');
+const revealText=$('#revealText');
+let coverClicked=false;
+
+$('#priceHit').addEventListener('click',()=>{
+  if(coverClicked)return;
+  coverClicked=true;
+  blinkNum.style.animation='none';
+  blinkNum.textContent='70';
+  animateNum(blinkNum,70,126,1500);
+  setTimeout(()=>{
+    revealText.classList.add('show');
+    blinkNum.style.animation='blink 1.5s infinite';
+  },1600);
+});
+
+/* ========== SCREEN 2: STORM SOURCE ========== */
+const dragTrack=$('#dragTrack');
+const dragHandle=$('#dragHandle');
+const oilPrice=$('#oilPrice');
+let dragging=false;
+
+function updateOilPrice(pos){
+  const rect=dragTrack.getBoundingClientRect();
+  const pct=Math.max(0,Math.min(1,(pos-rect.left)/rect.width));
+  const price=Math.round(70+pct*56);
+  oilPrice.textContent=price;
+  dragHandle.style.left=(pct*100)+'%';
+}
+
+dragHandle.addEventListener('pointerdown',e=>{
+  dragging=true;
+  dragHandle.setPointerCapture(e.pointerId);
+  e.preventDefault();
+});
+
+dragHandle.addEventListener('pointermove',e=>{
+  if(!dragging)return;
+  updateOilPrice(e.clientX);
+});
+
+dragHandle.addEventListener('pointerup',e=>{
+  dragging=false;
+  const rect=dragTrack.getBoundingClientRect();
+  updateOilPrice(e.clientX);
+});
+
+dragTrack.addEventListener('click',e=>{
+  if(e.target===dragHandle)return;
+  updateOilPrice(e.clientX);
+});
+
+// Map click popup
+$('#mapClick').addEventListener('click',()=>{
+  showPopup(
+    '🌊 霍尔木兹海峡',
+    '全球<strong>20%-25%</strong>的海运石油经过这里。自2026年2月底冲突升级以来，海峡近乎停摆。最窄处仅<strong>54公里</strong>（29海里），是全球能源运输最关键的瓶颈之一。'
+  );
+});
+
+/* ========== SCREEN 3: GAS STATION ========== */
+// Persona toggle
+const personaBtns=$$('#s3-gas .persona-btn');
+const storyCards={'driver':$('#story-driver'),'commuter':$('#story-commuter')};
+
+personaBtns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    personaBtns.forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    Object.values(storyCards).forEach(c=>c.classList.remove('active'));
+    storyCards[btn.dataset.persona].classList.add('active');
+  });
+});
+
+// Slider
+const gasSlider=$('#gasSlider');
+const sliderReveal=$('#sliderReveal');
+const sliderMessages=[
+  '← 滑动查看背后的机制 →',
+  '国内成品油定价存在"天花板价"机制',
+  '当国际油价超过130美元/桶时，国内油价不再上调或少调',
+  '因此国内涨幅（+19.3%）远小于国际涨幅（~80%）',
+  '保供稳价机制有效缓冲了国际油价对国内的直接冲击 ✓'
+];
+
+gasSlider.addEventListener('input',()=>{
+  const v=parseInt(gasSlider.value);
+  const idx=Math.min(Math.floor(v/25),sliderMessages.length-1);
+  sliderReveal.textContent=sliderMessages[idx];
+});
+
+/* ========== SCREEN 4: TRANSMISSION CHAIN ========== */
+$$('#s4-chain .chain-node').forEach(node=>{
+  node.addEventListener('click',()=>{
+    const detail=node.querySelector('.node-detail');
+    const wasOpen=detail.classList.contains('show');
+    // Close all
+    $$('#s4-chain .node-detail').forEach(d=>d.classList.remove('show'));
+    $$('#s4-chain .chain-node').forEach(n=>n.classList.remove('tapped'));
+    if(!wasOpen){
+      detail.classList.add('show');
+      node.classList.add('tapped');
+    }
+  });
+});
+
+// Special note popup
+$('#specialNote').addEventListener('click',()=>{
+  showPopup(
+    '🛡️ 保供稳价机制',
+    '在食用油领域，中国的供给稳定和价格管控机制正发挥积极作用。上海等地食用油零售均价环比下跌<strong>0.2%-0.5%</strong>，与国际食用油价格飙升形成鲜明对比（印度食用油价格翻了一倍以上）。'
+  );
+});
+
+/* ========== SCREEN 5: CHINA vs USA ========== */
+$$('#s5-compare .cmp-card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    const life=card.querySelector('.cmp-life');
+    const wasOpen=life.classList.contains('show');
+    // Close all
+    $$('#s5-compare .cmp-life').forEach(l=>l.classList.remove('show'));
+    $$('#s5-compare .cmp-card').forEach(c=>c.classList.remove('expanded'));
+    if(!wasOpen){
+      life.classList.add('show');
+      card.classList.add('expanded');
+    }
+  });
+});
+
+/* ========== SCREEN 6: INDIA & GERMANY ========== */
+const btnIndia=$('#btnIndia');
+const btnGermany=$('#btnGermany');
+const panelIndia=$('#panelIndia');
+const panelGermany=$('#panelGermany');
+
+btnIndia.addEventListener('click',()=>{
+  btnIndia.classList.add('active');
+  btnGermany.classList.remove('active');
+  panelIndia.classList.add('active');
+  panelGermany.classList.remove('active');
+});
+
+btnGermany.addEventListener('click',()=>{
+  btnGermany.classList.add('active');
+  btnIndia.classList.remove('active');
+  panelGermany.classList.add('active');
+  panelIndia.classList.remove('active');
+});
+
+/* ========== SCREEN 7: JAPAN ========== */
+// Timeline months
+$$('#s7-japan .tl-month').forEach(mon=>{
+  mon.addEventListener('click',()=>{
+    $$('#s7-japan .tl-month').forEach(m=>m.classList.remove('active'));
+    mon.classList.add('active');
+  });
+});
+
+// Category tags
+$$('#s7-japan .cat-tag').forEach(tag=>{
+  tag.addEventListener('click',()=>{
+    $$('#s7-japan .cat-tag').forEach(t=>t.classList.remove('active'));
+    tag.classList.add('active');
+    $$('#s7-japan .cat-detail').forEach(d=>d.classList.remove('show'));
+    const target=$('#cat-'+tag.dataset.cat);
+    if(target)target.classList.add('show');
+  });
+});
+
+// Engel coefficient
+$('#engelBox').addEventListener('click',()=>{
+  const explain=$('#engelBox .engel-explain');
+  explain.classList.toggle('show');
+});
+
+/* ========== SCREEN 8: SIMULATOR ========== */
+const checkItems=$$('#s8-sim .check-item');
+const totalNum=$('#totalNum');
+const totalNote=$('#totalNote');
+const MAX_SELECT=5;
+let selectedAmounts=[];
+
+checkItems.forEach(item=>{
+  item.addEventListener('click',()=>{
+    const amount=parseInt(item.dataset.amount);
+    if(item.classList.contains('checked')){
+      item.classList.remove('checked');
+      selectedAmounts=selectedAmounts.filter(a=>a!==amount);
+    }else{
+      if(selectedAmounts.length>=MAX_SELECT){
+        shakeItem(item);
+        return;
+      }
+      item.classList.add('checked');
+      selectedAmounts.push(amount);
+    }
+    updateTotal();
+  });
+});
+
+function shakeItem(el){
+  el.style.animation='none';
+  el.offsetHeight;
+  el.style.animation='shake .4s';
+  setTimeout(()=>el.style.animation='',400);
+}
+
+function updateTotal(){
+  const sum=selectedAmounts.reduce((a,b)=>a+b,0);
+  animateNum(totalNum,parseInt(totalNum.textContent)||0,sum,600);
+  if(sum===0){
+    totalNote.textContent='请勾选上方消费习惯';
+  }else{
+    totalNote.textContent='以上为基于真实数据的粗略估算，实际支出因地区和个人习惯而异';
+  }
+}
+
+// Reset
+$('#btnReset').addEventListener('click',()=>{
+  checkItems.forEach(c=>c.classList.remove('checked'));
+  selectedAmounts=[];
+  animateNum(totalNum,parseInt(totalNum.textContent),0,400);
+  totalNote.textContent='请勾选上方消费习惯';
+});
+
+// Chain modal
+const chainModal=$('#chainModal');
+const chainSteps=$$('#s8-sim .chain-step');
+const chainNext=$('#chainNext');
+const chainClose=$('#chainClose');
+let currentStep=1;
+
+$('#btnChain').addEventListener('click',()=>{
+  chainModal.classList.add('open');
+  currentStep=1;
+  showChainStep(1);
+  document.body.style.overflow='hidden';
+});
+
+chainClose.addEventListener('click',closeChain);
+chainModal.addEventListener('click',e=>{
+  if(e.target===chainModal)closeChain();
+});
+
+function closeChain(){
+  chainModal.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function showChainStep(n){
+  chainSteps.forEach((s,i)=>{
+    s.classList.toggle('active',i+1===n);
+  });
+  chainNext.textContent=n>=5?'关闭':'下一步 →';
+  chainNext.style.display=n>=5?'none':'inline-block';
+}
+
+chainNext.addEventListener('click',()=>{
+  if(currentStep<5){
+    currentStep++;
+    showChainStep(currentStep);
+  }
+});
+
+// Make chain steps clickable to advance
+chainSteps.forEach(step=>{
+  step.addEventListener('click',()=>{
+    if(currentStep<5&&step.dataset.step==currentStep){
+      currentStep++;
+      showChainStep(currentStep);
+    }
+  });
+});
+
+/* ========== POPUP UTILS ========== */
+const popupOverlay=$('#popupOverlay');
+const popupTitle=$('#popupTitle');
+const popupBody=$('#popupBody');
+const popupClose=$('#popupClose');
+
+function showPopup(title,body){
+  popupTitle.innerHTML=title;
+  popupBody.innerHTML=body;
+  popupOverlay.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function hidePopup(){
+  popupOverlay.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+popupClose.addEventListener('click',hidePopup);
+popupOverlay.addEventListener('click',e=>{
+  if(e.target===popupOverlay)hidePopup();
+});
+
+// ESC to close
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    hidePopup();
+    closeChain();
+  }
+});
+
+/* ========== SHAKE ANIMATION (injected) ========== */
+const shakeStyle=document.createElement('style');
+shakeStyle.textContent='@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}';
+document.head.appendChild(shakeStyle);
+
+/* ========== INITIAL SETUP ========== */
+// Initialize drag handle position
+dragHandle.style.left='0%';
+oilPrice.textContent='70';
+
+// Animate gas price number on scroll into view
+const gasObserver=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const el=$('#gasPriceNum');
+      if(el&&el.dataset.animated!=='true'){
+        el.dataset.animated='true';
+        const targetVal=19.3;
+        // Simple count-up from 0
+        const t0=performance.now();
+        function tick(now){
+          const p=Math.min((now-t0)/1000,1);
+          const e=1-Math.pow(1-p,3);
+          const v=(targetVal*e).toFixed(1);
+          el.innerHTML=v+'<span style="font-size:1rem">%</span>';
+          if(p<1)requestAnimationFrame(tick);
+          else el.innerHTML=targetVal+'<span style="font-size:1rem">%</span>';
+        }
+        requestAnimationFrame(tick);
+      }
+    }
+  });
+},{threshold:0.5});
+gasObserver.observe($('#s3-gas'));
+
+console.log('🛢️ 油价风暴眼 H5 已就绪 — 8屏交互式融合新闻');
+console.log('📱 移动端适配 | 🎨 Font Awesome + Emoji | ⚡ Vanilla JS');
+</script>
+
+</body>
+</html>
